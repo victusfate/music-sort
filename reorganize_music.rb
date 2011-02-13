@@ -1,8 +1,9 @@
 require 'fileutils'
+
 orig = '/home/messel/Desktop/music/'
 dest = '/home/messel/Desktop/mobilemusic/'
-Dir.chdir(orig)
-Dir.glob('*.m3u') do |m3u_name|
+
+def copy_m3u_list(m3u_name,orig,dest)
   m3us = IO.readlines(m3u_name)
   out_m3u = File.new(dest+m3u_name,'w+')
   m3us.each do |m3u|
@@ -22,3 +23,18 @@ Dir.glob('*.m3u') do |m3u_name|
   end
   out_m3u.close
 end
+
+
+if (ARGV.size > 0)
+    Dir.mkdir(dest) unless File.directory? dest
+    Dir.chdir(orig)
+    copy_m3u_list ARGV[0].to_s, orig, dest
+else
+  Dir.mkdir(dest) unless File.directory? dest
+  Dir.chdir(orig)
+  Dir.glob('*.m3u') do |m3u_name|
+    copy_m3u_list m3u_name, orig, dest
+  end
+end
+
+
